@@ -27,6 +27,7 @@ Route.get('/', async ({ view }) => {
 
 Route.get('getPeoples', 'OthersController.getPeoples')
 Route.post('storePeople', 'OthersController.storePeople')
+Route.post('editPeople', 'OthersController.editPeople')
 Route.post('deletePeople', 'OthersController.deletePeople')
 Route.get('getBlog', 'BlogsController.getBlog')
 Route.post('createBlog', 'BlogsController.createBlog')

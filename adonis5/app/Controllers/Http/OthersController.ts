@@ -21,5 +21,16 @@ export default class OthersController {
     let data = ctx.request.all()
     return await Person.query().where('id', data.id).delete();
   }
+  public async editPeople(ctx: HttpContextContract){
+    let data = ctx.request.all()
+    let ob = {
+      name: data.name,
+      email: data.email,
+      title: data.title,
+      image: data.image,
+    }
+   await Person.query().where("id",data.id).update(ob)
+   return await Person.query().where("id",data.id).first()
+  }
 
 }

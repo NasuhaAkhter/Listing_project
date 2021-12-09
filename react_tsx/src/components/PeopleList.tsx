@@ -53,6 +53,7 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
     
          }
     }
+    
     async function deleteItemFromBAck(index:number, id:number) {
         try{
             const res = await axios.post("http://localhost:3333/deletePeople", {id:id})
@@ -115,6 +116,8 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
             title: "",
             image: ""
         })
+    }
+    const updateItem = () => {
     }
     const deleteItem =( e:any,person:any, index:number) =>{
         console.log("delete on",e, index)
@@ -208,6 +211,7 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
                                             <div className="col-3 mx-auto">
                                                 
                                                  <button  type="submit"  onClick={handleClick} className="btn btn-primary d-block w-100 py-2">Add +</button>
+                                                 <button  type="submit"  onClick={updateItem} className="btn btn-primary d-block w-100 py-2">Update</button>
                                             </div>
                                         </div>
 
