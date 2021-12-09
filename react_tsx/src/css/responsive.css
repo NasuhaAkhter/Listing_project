@@ -1,0 +1,38 @@
+/* Desktop/Laptop */
+@media only screen and (max-width: 1500px) {}
+
+@media (max-width: 1336px) {
+    
+}
+/* Desktop/Laptop */
+/* Ipad pro */
+@media only screen and (max-width: 1199px) {
+
+}
+/* Ipad pro */
+
+@media only screen and (max-width: 991px) {
+    
+}
+
+/* Ipad pro */
+
+/* Ipad/Mobile L */
+
+@media only screen and (max-width: 767px) {
+
+}
+/* Ipad/Mobile L */
+
+/* Mobile */
+@media only screen and (max-width: 575px) {
+  
+}
+@media only screen and (max-width: 420px) {
+  
+}
+@media only screen and (max-width: 375px) {
+    
+}
+/* Mobile */
+

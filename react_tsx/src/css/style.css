@@ -1,0 +1,230 @@
+/*-----------------------
+    Common CSS
+-------------------------*/
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+html {
+    padding: 0px;
+    margin: 0 auto;
+}
+
+body {
+    margin: 0px auto;
+    padding: 0px;
+    background-color: #fafafa !important;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+pre,
+p {
+    margin: 0px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0px;
+}
+
+ul {
+    padding: 0;
+    margin: 0px;
+}
+
+textarea {
+    resize: none !important;
+}
+
+button,
+select {
+    cursor: pointer;
+}
+
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+}
+
+ul {
+    padding: 0px;
+    margin: 0px;
+}
+
+img {
+    width: 100%;
+    display: block;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a {
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease;
+    text-decoration: none;
+}
+
+
+/*-----------------------
+    Common CSS Ends
+-------------------------*/
+
+
+/*-----------------------
+    React Form
+-------------------------*/
+
+._react_form_wrapper {
+    padding: 50px 0 10px;
+}
+
+._react_form_content_inner {
+    padding: 30px 40px;
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+}
+
+
+/*-----------------------
+    React Form
+-------------------------*/
+
+
+/*-----------------------
+    React Card
+-------------------------*/
+
+._react_card_wrapper {
+    padding: 50px 0;
+}
+
+._react_card_content {
+    margin: 20px 0;
+    height: calc(100% - 40px);
+}
+
+._react_card_content_inner {
+    padding: 20px 30px;
+    border-radius: 18px;
+    height: 100%;
+    border: 1px solid #e6e6e6;
+    background: #fff;
+    -webkit-border-radius: 18px;
+    -moz-border-radius: 18px;
+    -ms-border-radius: 18px;
+    -o-border-radius: 18px;
+}
+
+._react_card_img_wrap {
+    margin: 20px 0;
+}
+
+._react_card_img {
+    max-width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto;
+}
+
+._react_card_txt {
+    margin: 20px 0;
+    text-align: center;
+}
+
+._react_card_name {
+    font-family: Lato;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 10px 0;
+}
+
+._react_card_email {
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 10px 0;
+}
+
+._react_card_title {
+    font-family: Inter;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 30px 0 4px;
+}
+
+
+/*-----------------------
+    React Card Ends
+-------------------------*/
+
+
+/*--------------
+    Responsive
+---------------*/
+
+
+/*------------------
+    Responsive Ends
+------------------*/
+
+
+/*------------------
+    Variable
+------------------*/
+
+:root {
+    /* Colors */
+    --color: #000;
+    --color2: #101130;
+    --color3: #67687B;
+    --color4: #898989;
+    --color5: #939393;
+    /* Colors */
+    /* Background */
+    --bg: #fff;
+    --bg2: #F77E53;
+    --bg3: #EDF3FF;
+    /* Background */
+    /* Border */
+    --border-color: #EAF1FB !important;
+    --border-color2: #CCDBF1 !important;
+    /* Border */
+}
+
+
+/*------------------
+    Variable Ends
+------------------*/
+/* NAsuha */
+.cross_icon{
+    cursor: pointer;
+
+}
+/* NAsuha */
