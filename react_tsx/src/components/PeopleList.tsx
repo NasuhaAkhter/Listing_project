@@ -40,16 +40,14 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
             const res = await axios.post("http://localhost:3333/storePeople", {...input})
             if(res.status == 200){
                 console.log(res.data)
-                setPeople([
-                    ...people,
-                    {
-                        id:res.data.id,
-                        name: res.data.name,
-                        email: res.data.email,
-                        title: res.data.title,
-                        image_url: res.data.image,
-                    }
-                ]);
+                let ob = {
+                            id:res.data.id,
+                            name: res.data.name,
+                            email: res.data.email,
+                            title: res.data.title,
+                            image_url: res.data.image,
+                        }
+                 setPeople( [ob,...people] )
             }
          }catch(error){
     
@@ -153,11 +151,7 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
                                 </svg>
                             </span>
                             </a>
-                            </p>
-                        
-                        
-                       
-                        
+                            </p>                        
                             <div className="_react_card_img_wrap">
                                 <img src={person.image_url} alt="Image" className="_react_card_img"/>
                             </div>
