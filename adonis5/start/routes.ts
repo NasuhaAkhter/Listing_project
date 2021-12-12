@@ -29,6 +29,8 @@ Route.get('getPeoples', 'OthersController.getPeoples')
 Route.post('storePeople', 'OthersController.storePeople')
 Route.post('editPeople', 'OthersController.editPeople')
 Route.post('deletePeople', 'OthersController.deletePeople')
+Route.post('uploadFile', 'OthersController.uploadFile')
+
 Route.get('getBlog', 'BlogsController.getBlog')
 Route.post('createBlog', 'BlogsController.createBlog')
 Route.post('editBlog', 'BlogsController.editBlog')

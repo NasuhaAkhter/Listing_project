@@ -1,11 +1,36 @@
 import axios from 'axios';
-import React, { useEffect, useState }  from 'react';
+import { Upload, message, Button } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import React, { SyntheticEvent, useEffect, useState }  from 'react';
 import { peopleState as Props} from '../interfaces/PeopleInterface';
+import { validateFileSize } from '../service/fileValidatorService'
+import { info } from 'console';
+import ReactDOM from 'react-dom';
+
  interface IProps{
     setPeople: React.Dispatch<React.SetStateAction<Props["people"]>>,
-    people:Props["people"]
-}
+    people:Props["people"],
+ 
+ }
 const PeopleList: React.FC<IProps> =({setPeople, people}) => { 
+    const [fileList, setFileList] = useState< {
+        response: {},
+        status: "",
+        name: "",
+        
+    }[]>( ) 
+    const props = {
+        name: 'file',
+        action: 'http://localhost:3333/uploadFile',
+        headers: {
+            authorization: 'authorization-text',
+        }
+    };
+    const onInputChange = (info: { file: { status: string; name: any; response:{} }; fileList: any; }) => {
+        console.log(info.file.response)
+        // setFileList(info.file.response, ...fileList);
+    };
+    const [uploadFormError , setUploadFormError] = useState<string>('')
     useEffect(() => {
          let isCancelled = false
          if(isCancelled == false){
@@ -139,6 +164,15 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
         setInput({ ...input, image: person.image_url  })
         editItemOnBack(index, id )
     }
+    const uploadFile= async (element:HTMLInputElement)=>{
+        console.log(element.files)
+        let  file = element.files
+        if(file === null) return
+        const validFileSize = await validateFileSize(file[0].size)
+        if( !validFileSize.isValid){
+            setUploadFormError(validFileSize.errorMessage)
+        }
+    }
     const renderList =():JSX.Element[] =>{
         return people.map((person, index)=>{
             return (
@@ -203,13 +237,23 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
                                                 value={input.title}/>
                                             </div>
                                             <div className="col-md-12">
-                                                <label htmlFor="name" className="form-label">Image Url</label>
-                                                <input type="text" className="form-control" id="image" onChange={handleChange}
-                                                name="image" placeholder="Image URL"
-                                                value={input.image}/>
-                                            </div>
-                                            <div className="col-3 mx-auto">
+                                                {/* {
+                                                 uploadFormError &&
+                                                 <p> {uploadFormError}</p>
                                                 
+                                                } */}
+                                                <label htmlFor="name" className="form-label">Upload Image</label>
+                                                {/* <input type="text" className="form-control" id="image" onChange={handleChange}
+                                                name="image" placeholder="Image URL"
+                                                value={input.image}/> */}
+                                                {/* <input type="file" className="form-control"  name="image" placeholder="Image URL" id="image" onChange={(e:SyntheticEvent )=>uploadFile(e.currentTarget as HTMLInputElement)}/> */}
+                                            </div>
+                                            <Upload   {...props} onChange={(e:any)=>onInputChange(e)} >
+                                                <Button   icon={<UploadOutlined />}>Click to Upload</Button>
+                                            </Upload>
+                                            
+
+                                            <div className="col-3 mx-auto">
                                                  <button  type="submit"  onClick={handleClick} className="btn btn-primary d-block w-100 py-2">Add +</button>
                                                  <button  type="submit"  onClick={updateItem} className="btn btn-primary d-block w-100 py-2">Update</button>
                                             </div>

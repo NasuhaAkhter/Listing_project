@@ -32,5 +32,27 @@ export default class OthersController {
    await Person.query().where("id",data.id).update(ob)
    return await Person.query().where("id",data.id).first()
   }
+  public async uploadFile(ctx: HttpContextContract): Promise<any>{
+    const profileImage = ctx.request.file('file', {
+      size: '10mb',
+      extnames: ['jpg', 'png', 'jpeg', 'webp', 'doc', 'pdf'],
+    })
+    // return ctx.request.all()
+    if (profileImage) {
+    //  return profileImage
+        let type = profileImage.extname
+
+
+        await profileImage.move('filestore',{
+            name: `${profileImage.clientName}.${profileImage.extname}`, overwrite: true,
+          })
+        const fileName = process.env.CLIENT+`${profileImage.clientName}.${profileImage.extname}`
+        let upFile = process.env.CLIENT+`/filestore/${fileName}`
+        return ctx.response.status(200).send({ response: upFile, type: type});
+
+    }
+    return ctx.response.status(422).send({ message: 'Invalid request' });
+
+  }
 
 }

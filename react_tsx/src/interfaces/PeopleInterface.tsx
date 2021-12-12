@@ -6,6 +6,7 @@ export interface peopleState{
       email:string
       title:string
       image_url:string
-    }[]
+    }[],
+    apiUrl:'http://localhost:3333/'
   }
  
