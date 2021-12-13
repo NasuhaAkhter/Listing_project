@@ -6,6 +6,7 @@ export interface peopleState{
       email:string
       title:string
       image_url:string
+      isEdit?:number 
     }[],
     apiUrl:'http://localhost:3333/'
   }

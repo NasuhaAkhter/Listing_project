@@ -13,12 +13,26 @@ import ReactDOM from 'react-dom';
  
  }
 const PeopleList: React.FC<IProps> =({setPeople, people}) => { 
-    const [fileList, setFileList] = useState< {
-        response: {},
-        status: "",
+    // var [isEdit ,setIsEdit] = useState<Boolean>(false)
+    var isEdit = false
+
+    const [input, setInput] = useState({
+         id:-1,
+        index:-1,
         name: "",
-        
-    }[]>( ) 
+        email: "",
+        title: "",
+        image: ""
+    })
+    const [fileList, setFileList] = useState< {
+        response: any,
+        status: string,
+        name: string,
+    }[] >([{
+        response: null,
+        status: '',
+        name: '',
+    }]) 
     const props = {
         name: 'file',
         action: 'http://localhost:3333/uploadFile',
@@ -27,8 +41,18 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
         }
     };
     const onInputChange = (info: { file: { status: string; name: any; response:{} }; fileList: any; }) => {
-        console.log(info.file.response)
-        // setFileList(info.file.response, ...fileList);
+        console.log(info, "info")
+        if(info.file && info.file.status == "done"){
+            let ob ={
+                response:info.file.response,
+                status: info.file.status,
+                name: info.file.name
+            }
+            console.log(ob, "Object")
+            setFileList( [ ...fileList ,ob]);
+            console.log("fileList1",fileList[1] )
+        }
+
     };
     const [uploadFormError , setUploadFormError] = useState<string>('')
     useEffect(() => {
@@ -37,7 +61,6 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
             getPeopleData();
             isCancelled = true
          }
-
     }, []);
     
     async function getPeopleData() {
@@ -95,36 +118,26 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
          }
     }
     async function  editItemOnBack(index:number, id:number) {
-        // if(!input.name || !input.email || input.title ) return
+        
         try{
             const res = await axios.post("http://localhost:3333/editPeople", {id:id, input})
             if(res.status == 200){
                 console.log(res.data)
-                // let arr = people;
-                // let ix = index;
-                // const noOfRows = [...arr.slice(0, ix), ...arr.slice(ix+1)] ;
-                // setPeople( noOfRows );
-                // setPeople([
-                //     ...people,
-                //     {
-                //         id:res.data.id,
-                //         name: res.data.name,
-                //         email: res.data.email,
-                //         title: res.data.title,
-                //         image_url: res.data.image,
-                //     }
-                // ]);
+                let prev = people[index]
+                prev.name = input.name
+                prev.title = input.title
+                prev.email = input.email
+                prev.image_url = input.image
+                let arr = people 
+                const updatedData = [...arr.slice(0, index), Object.assign({}, arr[index], prev), ...arr.slice(index + 1)]
+                setPeople(updatedData)
             }
          }catch(error){
     
          }
+         
     }
-     const [input, setInput] = useState({
-        name: "",
-        email: "",
-        title: "",
-        image: ""
-    }) 
+      
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setInput({
             ...input,
@@ -136,6 +149,8 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
         // if(!input.name || !input.email || input.title ) return
         storePeopleData()
         setInput({
+             id:-1,
+            index:-1,
             name: "",
             email: "",
             title: "",
@@ -151,18 +166,29 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
         deleteItemFromBAck(index, id )
     }
     const editItem =( e:any,person:any, index:number) =>{
-        console.log("edit on",e, person, index)
+        isEdit = true
+        let prev = people[index]
+        prev.isEdit = 1
+        let arr = people 
+        const updatedData = [...arr.slice(0, index), Object.assign({}, arr[index], prev), ...arr.slice(index + 1)]
+        setPeople(updatedData)
+        console.log(prev , "updated data" , ...people)
+       
         var id = -1
         if(person.id) {id = person.id}
+         input.id = person.id
+        input.index = index
         input.name = person.name
         input.email = person.email
         input.title = person.title
         input.image = person.image_url
+        setInput({ ...input, id: person.id  })
         setInput({ ...input, name: person.name  })
+         setInput({ ...input, index: index  })
         setInput({ ...input, email: person.email  })
         setInput({ ...input, title: person.title  })
         setInput({ ...input, image: person.image_url  })
-        editItemOnBack(index, id )
+         
     }
     const uploadFile= async (element:HTMLInputElement)=>{
         console.log(element.files)
@@ -181,23 +207,40 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
                         <div className="_react_card_content_inner">
                             <p>
                             <span className="cross_icon"  onClick={((e) => deleteItem(e, person, index))}   >X &nbsp; </span>
-                            <a href="#_inputs"> 
+                            
                             <span  onClick={((e) => editItem(e, person, index))}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48" fill="none">
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M41.4853 13.4853L34.4142 6.41421C33.6332 5.63317 32.3668 5.63316 31.5858 6.41421L14.6153 23.3848L24.5147 33.2842L41.4853 16.3137C42.2663 15.5327 42.2663 14.2663 41.4853 13.4853ZM21.7995 34.8116L13.0879 26.1L9.66548 38.234L21.7995 34.8116Z" fill="black"/>
                                 </svg>
                             </span>
-                            </a>
+                            
                             </p>                        
                             <div className="_react_card_img_wrap">
                                 <img src={person.image_url} alt="Image" className="_react_card_img"/>
                             </div>
-                            <div className="_react_card_txt">
-                                <h3 className="_react_card_name">{ person.name }</h3>
-                                <p className="_react_card_email">{person.email}</p>
-                                <h4 className="_react_card_title">{person.title}</h4>
-                            </div>
+                            {/* <div className="_react_card_txt"  >
+                                { input.index == index && person.isEdit && person.isEdit == 1  ? renderInput : renderPerson}
+                            </div> */}
 
+                            { person.isEdit && person.isEdit == 1 ? 
+                            <div className="_react_card_txt" >
+                                <input placeholder="Name" onChange={handleChange}  value={person.name} type="text"/>
+                                <input placeholder="Title" onChange={handleChange} value={person.email} type="text"/>
+                                <input placeholder="Email" onChange={handleChange} value={person.title} type="text"/>
+                                <Upload   {...props} onChange={(e:any)=>onInputChange(e)} >
+                                    <Button   icon={<UploadOutlined />}>Click to Upload</Button>
+                                </Upload>
+                                <button  type="submit"   onClick={((e) => editItemOnBack( index, person.id))}    className="btn btn-success d-block w-100 py-2">update</button>
+                            </div> 
+                            :
+                            <div className="_react_card_txt">
+                                
+                                <p> edit: {person.isEdit }</p>
+                                <h3 className="_react_card_name">{person.name}</h3>
+                                <p className="_react_card_email">{person.email}</p>
+                                <h4 className="_react_card_title">{ person.title}</h4>
+                            </div>
+                            }
                         </div>
                         
                     </div>
@@ -206,6 +249,24 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
             )
         })
     }
+     
+    var renderPerson = {} 
+    var renderInput = {}
+         renderPerson = 
+         <div className="_react_card_txt">
+            <h3 className="_react_card_name">{people[input.index] ? people[input.index].name :''}</h3>
+            <p className="_react_card_email">{people[input.index]?  people[input.index].email :''}</p>
+            <h4 className="_react_card_title">{ people[input.index] ? people[input.index].title :''}</h4>
+        </div>
+        renderInput =
+        <div>
+            <input placeholder="Name" type="text"/>
+            <input placeholder="Title" type="text"/>
+            <input placeholder="Email" type="text"/>
+            <Upload   {...props} onChange={(e:any)=>onInputChange(e)} >
+                <Button   icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload>
+        </div>
     return (
         <div>
             <div id="_inputs"  className="_react_form_wrapper">
@@ -254,8 +315,7 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
                                             
 
                                             <div className="col-3 mx-auto">
-                                                 <button  type="submit"  onClick={handleClick} className="btn btn-primary d-block w-100 py-2">Add +</button>
-                                                 <button  type="submit"  onClick={updateItem} className="btn btn-primary d-block w-100 py-2">Update</button>
+                                                 
                                             </div>
                                         </div>
 
@@ -274,71 +334,7 @@ const PeopleList: React.FC<IProps> =({setPeople, people}) => {
                              
                             <div className="row">
                             {renderList()}
-                                <div className="col-xl col-md col-sm col-12">
-                                    <div className="_react_card_content">
-                                        <div className="_react_card_content_inner">
-                                            <div className="_react_card_img_wrap">
-                                                <img src="http://image4.photobiz.com/728/7_20200317225907_11115505_large.jpg" alt="Image" className="_react_card_img"/>
-                                            </div>
-                                            <div className="_react_card_txt">
-                                               <h3 className="_react_card_name">Mitchel Clark</h3>
-                                                <p className="_react_card_email">mclark@gmail.com</p>
-                                                <h4 className="_react_card_title">Marketing</h4>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div className="col-xl col-md col-sm col-12">
-                                    <div className="_react_card_content">
-                                        <div className="_react_card_content_inner">
-                                            <div className="_react_card_img_wrap">
-                                                <img src="http://image4.photobiz.com/728/7_20200317225907_11115505_large.jpg" alt="Image" className="_react_card_img"/>
-                                            </div>
-                                            <div className="_react_card_txt">
-                                               <h3 className="_react_card_name">Mitchel Clark</h3>
-                                                <p className="_react_card_email">mclark@gmail.com</p>
-                                                <h4 className="_react_card_title">Marketing</h4>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div className="col-xl col-md col-sm col-12">
-                                    <div className="_react_card_content">
-                                        <div className="_react_card_content_inner">
-                                            <div className="_react_card_img_wrap">
-                                                <img src="http://image4.photobiz.com/728/7_20200317225907_11115505_large.jpg" alt="Image" className="_react_card_img"/>
-                                            </div>
-                                            <div className="_react_card_txt">
-                                               <h3 className="_react_card_name">Mitchel Clark</h3>
-                                                <p className="_react_card_email">mclark@gmail.com</p>
-                                                <h4 className="_react_card_title">Marketing</h4>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div className="col-xl col-md col-sm col-12">
-                                    <div className="_react_card_content">
-                                        <div className="_react_card_content_inner">
-                                            <div className="_react_card_img_wrap">
-                                                <img src="http://image4.photobiz.com/728/7_20200317225907_11115505_large.jpg" alt="Image" className="_react_card_img"/>
-                                            </div>
-                                            <div className="_react_card_txt">
-                                               <h3 className="_react_card_name">Mitchel Clark</h3>
-                                                <p className="_react_card_email">mclark@gmail.com</p>
-                                                <h4 className="_react_card_title">Marketing</h4>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
+                                  </div>
 
                         </div>
                     </div>
